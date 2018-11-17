@@ -7,7 +7,7 @@ import { ThemeProvider } from '../../typed-components';
 
 const AppContainer = ({ data }) => (
     <ThemeProvider theme={theme}>
-        <AppPresenter isLoggedIn={data.auth.isLoggedIn} />;
+        <AppPresenter isLoggedIn={data.auth.isLoggedIn} />
     </ThemeProvider>
 );
 
