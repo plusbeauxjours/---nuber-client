@@ -25,10 +25,10 @@ const client = new ApolloClient({
                 logUserOut: (_, __, { cache }) => {
                     localStorage.removeItem("jwt");
                     cache.writeData({
-                        auth: {
-                            data: {
+                        data: {
+                            auth: {
                                 __typename: "Auth",
-                                isLoggedIn: false,
+                                isLoggedIn: false
                             }
                         }
                     });
@@ -37,7 +37,7 @@ const client = new ApolloClient({
             }
         }
     },
-    request: async(operation: Operation) => {
+    request: async (operation: Operation) => {
         operation.setContext({
             headers: {
                 "X-JWT": localStorage.getItem("jwt") || ""
@@ -47,4 +47,4 @@ const client = new ApolloClient({
     uri: "http://localhost:4000/graphql"
 });
 
-export default client;  
+export default client;
