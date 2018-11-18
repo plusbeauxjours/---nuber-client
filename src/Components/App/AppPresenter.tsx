@@ -23,9 +23,9 @@ const AppPresenter: React.SFC<IProps> = ({ isLoggedIn }) => (
     </BrowserRouter>
 );
 
-const LoggedInRoutes: React.SFC = () => (
+const LoggedOutRoutes: React.SFC = () => (
     <Switch>
-        <Route path={"/"} exact={true} component={Home} />
+        <Route path={"/"} exact={true} component={Login} />
         <Route path={"/phone-login"} component={PhoneLogin} />
         <Route path={"/verify-phone/:number"} component={VerifyPhone} />
         <Route path={"/social-login"} component={SocialLogin} />
@@ -33,9 +33,9 @@ const LoggedInRoutes: React.SFC = () => (
     </Switch>
 );
 
-const LoggedOutRoutes: React.SFC = () => (
+const LoggedInRoutes: React.SFC = () => (
     <Switch>
-        <Route path={"/"} exact={true} component={Login} />
+        <Route path={"/"} exact={true} component={Home} />
         <Route path={"/ride"} component={Ride} />
         <Route path={"/edit-account"} component={EditAccount} />
         <Route path={"/settings"} component={Settings} />

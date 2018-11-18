@@ -2,19 +2,21 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import styled from '../../typed-components';
 import bgImage from '../../images/bg.png';
+import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
     height: 100vh;
-`
+`;
 
 const Header = styled.header`
     height: 70%;
-    background: linear-gradient(rgba(0, 153, 196, 0.5), rgba(0, 153, 196, 0.2)),
+    background: linear-gradient(rgba(0, 153, 196, 0.5), rgba(0, 153, 196, 0.4)),
         url(${bgImage});
     display: flex;
     align-items: center;
     justify-content: center;
-`
+`;
 
 const Logo = styled.div`
     width: 110px;
@@ -27,7 +29,7 @@ const Logo = styled.div`
     text-transform: uppercase;
     font-weight: 500px;
     font-size: 25px;
-`
+`;
 
 const Title = styled.h1``;
 
@@ -45,6 +47,7 @@ const FakeInput = styled.div`
 
 const PhoneLogin = styled.div`
     padding: 20px;
+    cursor: default;
 `;
 
 const Grey = styled.span`
@@ -60,26 +63,34 @@ const SocialLogin = styled.div`
 const SocialLink = styled.span`
     color: ${props => props.theme.blueColor};
     font-size: 20px;
+    cursor: default;
 `;
 
 interface IProps extends RouteComponentProps<any> {}
 
 const LoginPresenter: React.SFC<IProps> = () => (
     <Container>
+        <Helmet>
+            <title>Login | Nuber</title>
+        </Helmet>
         <Header>
             <Logo>
                 <Title>Nuber</Title>
             </Logo>
         </Header>
         <Footer>
-            <PhoneLogin>
-                <Subtitle>Get moving with Nuber</Subtitle>
-                <FakeInput>
-                    🇰🇷 +82<Grey>Enter your mobile number</Grey>
-                </FakeInput>
-            </PhoneLogin>
+            <Link to={"/phone-login"}>
+                    <PhoneLogin>
+                    <Subtitle>Get moving with Nuber</Subtitle>
+                    <FakeInput>
+                        🇰🇷 +82<Grey>Enter your mobile number</Grey>
+                    </FakeInput>
+                </PhoneLogin>
+            </Link>
             <SocialLogin>
-                <SocialLink>Or connect with social</SocialLink>
+                <Link to={"/social-login"}>
+                    <SocialLink>Or connect with social</SocialLink>
+                </Link>
             </SocialLogin>
         </Footer>
     </Container>
