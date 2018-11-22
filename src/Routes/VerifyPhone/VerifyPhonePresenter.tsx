@@ -27,7 +27,7 @@ const VerifyPhonePresenter = () => (
         placeholder={"Enter Verification Code"}
         onChange={null}
       />
-      <Button />
+      <Button value={"Submit"} onClick={"null"} />
     </Form>
   </Conatiner>
 );
