@@ -20,7 +20,7 @@ const VerifyPhonePresenter = () => (
     <Helmet>
       <title>Verify Phone | Nuber</title>
     </Helmet>
-    <Header />
+    <Header backTo={"/phone-logn"} title={"Verify Phone Number"} />
     <Form>
       <ExtendedInput
         value={""}
