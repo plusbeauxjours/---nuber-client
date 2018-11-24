@@ -2,10 +2,10 @@ import React from "react";
 import { Mutation, MutationFn } from "react-apollo";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
+import { LOG_USER_IN } from "../../sharedQueries.local";
 import { facebookConnect, facebookConnectVariables } from "../../types/api";
 import SocialLoginPresenter from "./SocialLoginPresenter";
 import { FACEBOOK_CONNECT } from "./SocialLoginQueries";
-import { LOG_USER_IN } from "../../sharedQueries.local";
 
 class LoginMutation extends Mutation<
   facebookConnect,
@@ -63,7 +63,6 @@ class SocialLoginContainer extends React.Component<IProps, IState> {
   public loginCallback = response => {
     const { name, first_name, last_name, email, id, accessToken } = response;
     if (accessToken) {
-      console.log(response);
       toast.success(`Welcome ${name}!`);
       this.facebookMutation({
         variables: {
