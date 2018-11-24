@@ -5,7 +5,7 @@ import { Mutation } from "react-apollo";
 import { verifyPhoneVariables, verifyPhone } from "../../types/api";
 import { VERIFY_PHONE } from "./VerifyPhoneQueries";
 import { toast } from "react-toastify";
-import { LOG_USER_IN } from "../../sharedQueries";
+import { LOG_USER_IN } from "../../sharedQueries.local";
 
 interface IState {
   verificationKey: string;
