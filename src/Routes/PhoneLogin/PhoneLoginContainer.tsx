@@ -14,15 +14,14 @@ interface IState {
   phoneNumber: string;
 }
 
+interface IProps extends RouteComponentProps<any> {}
+
 class PhoneSignInMutation extends Mutation<
   startPhoneVerification,
   startPhoneVerificationVariables
 > {}
 
-class PhoneLoginContainer extends React.Component<
-  RouteComponentProps<any>,
-  IState
-> {
+class PhoneLoginContainer extends React.Component<IProps, IState> {
   public phoneMutation: MutationFn;
   public state = {
     countryCode: "+36",
