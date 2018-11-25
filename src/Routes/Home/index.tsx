@@ -1,5 +1,2 @@
-import React from 'react';
-
-const R = () =>  <span>lalahome</span>
-
-export default R;
+import HomeContainer from "./HomeContainer";
+export default HomeContainer;
