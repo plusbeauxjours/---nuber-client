@@ -124,6 +124,9 @@ export interface verifyPhoneVariables {
 
 export interface userProfile_GetMyProfile_user {
   __typename: "User";
+  firstName: string;
+  lastName: string;
+  email: string | null;
   profilePhoto: string | null;
   fullName: string | null;
   isDriving: boolean;

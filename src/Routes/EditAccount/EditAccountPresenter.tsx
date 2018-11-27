@@ -6,7 +6,6 @@ import Input from "../../Components/Input/Input";
 import Helmet from "react-helmet";
 import Header from "src/Components/Header";
 import Button from "src/Components/Button";
-import { updateProfile } from "../../types/api";
 
 const Container = styled.div``;
 
@@ -42,24 +41,24 @@ const EditAccountPresenter: React.SFC<IProps> = ({
       <title>Edit Account | Nuber</title>
     </Helmet>
     <Header title={"Edit Account"} backTo={"/"} />
-    <ExtendedForm submitFn={onsubmit}>
+    <ExtendedForm submitFn={onSubmit}>
       <ExtendedInput
-        onChage={onInputChange}
+        onChange={onInputChange}
         type={"text"}
         value={firstName}
-        plcaholder={"First name"}
+        placeholder={"First name"}
       />
       <ExtendedInput
-        onChage={onInputChange}
+        onChange={onInputChange}
         type={"text"}
         value={lastName}
-        plcaholder={"Last name"}
+        placeholder={"Last name"}
       />
       <ExtendedInput
-        onChage={onInputChange}
+        onChange={onInputChange}
         type={"email"}
         value={email}
-        plcaholder={"Email"}
+        placeholder={"Email"}
       />
       <Button onClick={null} value={loading ? "Loading" : "Update"} />
     </ExtendedForm>
