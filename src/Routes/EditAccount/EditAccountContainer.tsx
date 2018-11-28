@@ -7,8 +7,9 @@ import {
   updateProfileVariables,
   userProfile
 } from "src/types/api";
-import { UPDATE_USERPROFILE } from "./EditAccountQueries";
+import { UPDATE_PROFILE } from "./EditAccountQueries";
 import { USER_PROFILE } from "../../sharedQueries";
+import { toast } from "react-toastify";
 
 interface IState {
   email: string;
@@ -39,7 +40,16 @@ class EditAccountContainer extends React.Component<IProps, IState> {
       <ProfileQuery query={USER_PROFILE} onCompleted={this.updateFields}>
         {() => (
           <UpdateProfileMutation
-            mutation={UPDATE_USERPROFILE}
+            mutation={UPDATE_PROFILE}
+            refetchQueries={[{ query: USER_PROFILE }]}
+            onCompleted={data => {
+              const { UpdateMyProfile } = data;
+              if (UpdateMyProfile.ok) {
+                toast.success("Profile Updated!");
+              } else if (UpdateMyProfile.error) {
+                toast.error(UpdateMyProfile.error);
+              }
+            }}
             variables={{
               email,
               firstName,
@@ -74,6 +84,7 @@ class EditAccountContainer extends React.Component<IProps, IState> {
   };
 
   public updateFields = (data: {} | userProfile) => {
+    console.log(data);
     if ("GetMyProfile" in data) {
       const {
         GetMyProfile: { user }
