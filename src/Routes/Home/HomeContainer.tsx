@@ -15,7 +15,7 @@ class ProfileQuery extends Query<userProfile> {}
 
 class HomeContainer extends React.Component<IProps, IState> {
   public state = {
-    isMenuOpen: false
+    isMenuOpen: true
   };
   public render() {
     const { isMenuOpen } = this.state;
