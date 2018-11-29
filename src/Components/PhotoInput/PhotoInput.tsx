@@ -12,7 +12,7 @@ const Image = styled.label`
   margin-bottom: 35px;
   display: flex;
   align-items: center;
-  justify-content: cneter;
+  justify-content: center;
   font-size: 28px;
   overflow: hidden;
   & img {
