@@ -126,8 +126,7 @@ class EditAccountContainer extends React.Component<IProps, IState> {
           email,
           firstName,
           lastName,
-          profilePhoto,
-          uploading: profilePhoto !== null
+          profilePhoto
         } as any);
       }
     }

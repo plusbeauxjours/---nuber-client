@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "../../typed-components";
-import { Link } from "react-router-dom";
-import { userProfile, toggleDriving } from "../../types/api";
 import { MutationFn } from "react-apollo";
+import { Link } from "react-router-dom";
+import styled from "../../typed-components";
+import { toggleDriving, userProfile } from "../../types/api";
 
 const Container = styled.div`
   height: 100%;
@@ -16,12 +16,12 @@ const Header = styled.div`
   color: white;
 `;
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-gap: 10px;
-  height: 100%;
-  align-items: center;
+const SLink = styled(Link)`
+  font-size: 22px;
+  display: block;
+  margin-left: 15px;
+  margin-bottom: 25px;
+  font-weight: 400;
 `;
 
 const Image = styled.img`
@@ -29,12 +29,6 @@ const Image = styled.img`
   width: 80px;
   background-color: grey;
   border-radius: 40px;
-  overflow: hidden;
-`;
-
-const Text = styled.span`
-  text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
 `;
 
@@ -52,12 +46,18 @@ const Rating = styled.h5`
   color: white;
 `;
 
-const SLink = styled(Link)`
-  font-size: 22px;
-  display: block;
-  margin-left: 15px;
-  margin-bottom: 25px;
-  font-weight: 400;
+const Text = styled.span`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 10px;
+  height: 100%;
+  align-items: center;
 `;
 
 interface IToggleProps {
@@ -93,12 +93,7 @@ const MenuPresenter: React.SFC<IProps> = ({
         <Header>
           <Grid>
             <Link to={"/edit-account"}>
-              <Image
-                src={
-                  user.profilePhoto ||
-                  "https://avatars2.githubusercontent.com/u/12480618?s=460&v=4"
-                }
-              />
+              <Image src={user.profilePhoto || "+"} />
             </Link>
             <Text>
               <Name>{user.fullName}</Name>
@@ -108,7 +103,7 @@ const MenuPresenter: React.SFC<IProps> = ({
         </Header>
         <SLink to="/trips">Your Trips</SLink>
         <SLink to="/settings">Settings</SLink>
-        <ToggleDriving isDriving={user.isDriving} onClick={toggleDrivingFn}>
+        <ToggleDriving onClick={toggleDrivingFn} isDriving={user.isDriving}>
           {user.isDriving ? "Stop driving" : "Start driving"}
         </ToggleDriving>
       </React.Fragment>
