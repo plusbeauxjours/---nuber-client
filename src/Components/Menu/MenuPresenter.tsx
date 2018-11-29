@@ -101,7 +101,7 @@ const MenuPresenter: React.SFC<IProps> = ({
               />
             </Link>
             <Text>
-              <Name>Minjae Lee</Name>
+              <Name>{user.fullName}</Name>
               <Rating>4.5</Rating>
             </Text>
           </Grid>
