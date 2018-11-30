@@ -37,7 +37,7 @@ class FindAddressPresenter extends React.Component<IProps> {
           <title>Find Address | Nuber</title>
         </Helmet>
         <Center>📍</Center>
-        <Map innerRef={mapRef} />
+        <Map ref={mapRef} />
       </div>
     );
   }
