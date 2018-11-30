@@ -19,10 +19,10 @@ interface IProps {
   loading: boolean;
 }
 
-const PlacesPresenter: React.SFC<IProps> = (
-  { data: { GetMyPlaces: { places = null } = {} } = {} },
+const PlacesPresenter: React.SFC<IProps> = ({
+  data: { GetMyPlaces: { places = null } = {} } = {},
   loading
-) => (
+}) => (
   <React.Fragment>
     <Helmet>
       <title>Places | Nuber</title>

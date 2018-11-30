@@ -89,7 +89,7 @@ const SettingsPresenter: React.SFC<IProps> = ({
             address={place!.address}
           />
         ))}
-      <SLink to={"/places"}>GO to Places</SLink>
+      <SLink to={"/places"}>Go to Places</SLink>
       <FakeLink onClick={logUserOut as any}>Log Out</FakeLink>
     </Container>
   </React.Fragment>
