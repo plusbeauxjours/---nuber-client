@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import FindAddressPresenter from "./FindAddressPresenter";
-import { resverseGeoCode } from "../../mapHelpers";
+import { reverseGeoCode } from "../../mapHelpers";
 
 interface IState {
   lat: number;
@@ -75,7 +75,7 @@ class FindAddressContainer extends React.Component<any, IState> {
       lat,
       lng
     });
-    resverseGeoCode(lat, lng);
+    reverseGeoCode(lat, lng);
   };
   public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
