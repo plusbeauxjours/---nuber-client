@@ -1,7 +1,7 @@
 import React from "react";
 import Helmet from "react-helmet";
-import styled from "src/typed-components";
-import AddressBar from "src/Components/AddressBar";
+import styled from "../../typed-components";
+import AddressBar from "../../Components/AddressBar";
 
 const Map = styled.div`
   position: absolute;

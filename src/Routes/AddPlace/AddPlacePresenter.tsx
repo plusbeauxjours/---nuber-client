@@ -1,12 +1,12 @@
 import React from "react";
-import styled from "src/typed-components";
+import styled from "../../typed-components";
 import { Link } from "react-router-dom";
-import Header from "src/Components/Header";
+import Header from "../../Components/Header";
 import Helmet from "react-helmet";
-import Form from "src/Components/Form";
+import Form from "../../Components/Form";
 import Input from "../../Components/Input/Input";
 import { MutationFn } from "react-apollo";
-import Button from "src/Components/Button";
+import Button from "../../Components/Button";
 
 const Container = styled.div`
   padding: 0 40px;
