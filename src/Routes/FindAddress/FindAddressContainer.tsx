@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import FindAddressPresenter from "./FindAddressPresenter";
 import { geoCode, reverseGeoCode } from "../../mapHelpers";
+import { RouteComponentProps } from "react-router-dom";
 
 interface IState {
   lat: number;
@@ -9,7 +10,11 @@ interface IState {
   address: string;
 }
 
-class FindAddressContainer extends React.Component<any, IState> {
+interface IProps extends RouteComponentProps<any> {
+  google: any;
+}
+
+class FindAddressContainer extends React.Component<IProps, IState> {
   public mapRef: any;
   public map: google.maps.Map;
   public state = {
@@ -37,6 +42,7 @@ class FindAddressContainer extends React.Component<any, IState> {
         address={address}
         onInputChange={this.onInputChange}
         onInputBlur={this.onInputBlur}
+        onPickPlace={this.onPickPlace}
       />
     );
   }
@@ -117,6 +123,20 @@ class FindAddressContainer extends React.Component<any, IState> {
         address: reversedAddress
       });
     }
+  };
+
+  public onPickPlace = () => {
+    const { address, lat, lng } = this.state;
+    const { history } = this.props;
+    history.push({
+      pathname: "/add-place",
+      state: {
+        address,
+        lat,
+        lng
+      }
+    });
+    console.log(address, lat, lng);
   };
 }
 
