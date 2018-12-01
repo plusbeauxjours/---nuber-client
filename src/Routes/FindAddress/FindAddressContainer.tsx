@@ -46,8 +46,9 @@ class FindAddressContainer extends React.Component<any, IState> {
       lat: latitude,
       lng: longitude
     });
-    console.log(position);
+    console.log(position, this.state);
     this.loadMap(latitude, longitude);
+    this.reverseGeocodeAddress(latitude, longitude);
   };
   public handleGeoError = () => {
     console.log("No location");
@@ -88,6 +89,14 @@ class FindAddressContainer extends React.Component<any, IState> {
   };
   public onInputBlur = () => {
     console.log("Address updated");
+  };
+  public reverseGeocodeAddress = async (lat: number, lng: number) => {
+    const reversedAddress = await reverseGeoCode(lat, lng);
+    if (reversedAddress !== false) {
+      this.setState({
+        address: reversedAddress
+      });
+    }
   };
 }
 
