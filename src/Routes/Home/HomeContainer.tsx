@@ -76,7 +76,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     const { google } = this.props;
     const maps = google.maps;
     const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
-    const mapConfig = (google.maps.MapOptions = {
+    const mapConfig: google.maps.MapOptions = {
       center: {
         lat,
         lng
@@ -84,7 +84,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       disableDefaultUI: true,
       minZoom: 8,
       zoom: 11
-    });
+    };
     this.map = new maps.Map(mapNode, mapConfig);
     const userMarkerOptions: google.maps.MarkerOptions = {
       icon: {

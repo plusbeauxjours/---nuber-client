@@ -67,7 +67,7 @@ class FindAddressPresenter extends React.Component<IProps> {
         />
         <ExtendedButton value={"Pick this place"} onClick={onPickPlace} />
         <Center>📍</Center>
-        <Map innerRef={mapRef} />
+        <Map ref={mapRef} />
       </div>
     );
   }

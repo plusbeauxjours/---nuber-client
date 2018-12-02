@@ -44,8 +44,7 @@ class FindAddressContainer extends React.Component<IProps, IState> {
       />
     );
   }
-
-  public handleGeoSuccess = (position: Position) => {
+  public handleGeoSuccess: PositionCallback = (position: Position) => {
     const {
       coords: { latitude, longitude }
     } = position;
@@ -57,11 +56,9 @@ class FindAddressContainer extends React.Component<IProps, IState> {
     this.loadMap(latitude, longitude);
     this.reverseGeocodeAddress(latitude, longitude);
   };
-
-  public handleGeoError = () => {
+  public handleGeoError: PositionErrorCallback = () => {
     console.log("No location");
   };
-
   public loadMap = (lat, lng) => {
     const { google } = this.props;
     const maps = google.maps;
@@ -78,7 +75,6 @@ class FindAddressContainer extends React.Component<IProps, IState> {
     this.map = new maps.Map(mapNode, mapConfig);
     this.map.addListener("dragend", this.handleDragEnd);
   };
-
   public handleDragEnd = () => {
     const newCenter = this.map.getCenter();
     const lat = newCenter.lat();
@@ -89,7 +85,6 @@ class FindAddressContainer extends React.Component<IProps, IState> {
     });
     this.reverseGeocodeAddress(lat, lng);
   };
-
   public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { name, value }
@@ -98,7 +93,6 @@ class FindAddressContainer extends React.Component<IProps, IState> {
       [name]: value
     } as any);
   };
-
   public onInputBlur = async () => {
     const { address } = this.state;
     const result = await geoCode(address);
@@ -113,7 +107,6 @@ class FindAddressContainer extends React.Component<IProps, IState> {
       this.map.panTo({ lat, lng });
     }
   };
-
   public reverseGeocodeAddress = async (lat: number, lng: number) => {
     const reversedAddress = await reverseGeoCode(lat, lng);
     if (reversedAddress !== false) {
@@ -122,7 +115,6 @@ class FindAddressContainer extends React.Component<IProps, IState> {
       });
     }
   };
-
   public onPickPlace = () => {
     const { address, lat, lng } = this.state;
     const { history } = this.props;
