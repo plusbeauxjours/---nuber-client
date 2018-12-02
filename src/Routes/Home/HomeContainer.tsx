@@ -27,6 +27,7 @@ class HomeContainer extends React.Component<IProps, IState> {
   public map: google.maps.Map;
   public userMarker: google.maps.Marker;
   public toMarker: google.maps.Marker;
+  public directions: google.maps.DirectionsRenderer;
   public state = {
     isMenuOpen: false,
     lat: 0,
@@ -160,7 +161,32 @@ class HomeContainer extends React.Component<IProps, IState> {
       };
       this.toMarker = new maps.Marker(toMarkerOptions);
       this.toMarker.setMap(this.map);
+      const bounds = new google.maps.LatLngBounds();
+      bounds.extend({ lat, lng });
+      bounds.extedm({ lat: this.state.lat, lng: this.state.lng });
+      this.map.fitBounds(bounds);
+      this.setState(
+        {
+          toAddress: formatedAddress,
+          toLat: lat,
+          toLng: lng
+        },
+        this.createPath
+      );
     }
+  };
+  public createPath = () => {
+    const { toLat, toLng, lat, lng } = this.state;
+    if (this.directions) {
+      this.directions.setMap(null);
+    }
+    const renderOptions: google.maps.DirectionsRendererOptions = {
+      polylineOptions: {
+        strokeColor: "#000"
+      },
+      suppressMarkers: true
+    };
+    const directionService: google.maps.DirectionsService = new google.maps.DirectionsService();
   };
 }
 
