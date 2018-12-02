@@ -95,7 +95,6 @@ class HomeContainer extends React.Component<IProps, IState> {
         lng
       },
       disableDefaultUI: true,
-      minZoom: 8,
       zoom: 11
     };
     this.map = new maps.Map(mapNode, mapConfig);
@@ -120,14 +119,14 @@ class HomeContainer extends React.Component<IProps, IState> {
       watchOptions
     );
   };
-  public handleGeoWatchSuccess = (position: Position) => {
+  public handleGeoWatchSuccess: PositionCallback = (position: Position) => {
     const {
       coords: { latitude, longitude }
     } = position;
     this.userMarker.setPosition({ lat: latitude, lng: longitude });
     this.map.panTo({ lat: latitude, lng: longitude });
   };
-  public handleGeoWatchError = () => {
+  public handleGeoWatchError: PositionErrorCallback = () => {
     console.log("No location");
   };
   public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,11 +144,6 @@ class HomeContainer extends React.Component<IProps, IState> {
     const result = await geoCode(toAddress);
     if (result !== false) {
       const { lat, lng, formatted_address: formatedAddress } = result;
-      this.setState({
-        toAddress: formatedAddress,
-        toLat: lat,
-        toLng: lng
-      });
       if (this.toMarker) {
         this.toMarker.setMap(null);
       }
@@ -161,9 +155,9 @@ class HomeContainer extends React.Component<IProps, IState> {
       };
       this.toMarker = new maps.Marker(toMarkerOptions);
       this.toMarker.setMap(this.map);
-      const bounds = new google.maps.LatLngBounds();
+      const bounds = new maps.LatLngBounds();
       bounds.extend({ lat, lng });
-      bounds.extedm({ lat: this.state.lat, lng: this.state.lng });
+      bounds.extend({ lat: this.state.lat, lng: this.state.lng });
       this.map.fitBounds(bounds);
       this.setState(
         {
