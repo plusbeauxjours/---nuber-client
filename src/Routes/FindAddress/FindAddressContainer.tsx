@@ -22,12 +22,10 @@ class FindAddressContainer extends React.Component<IProps, IState> {
     lat: 0,
     lng: 0
   };
-
   constructor(props) {
     super(props);
     this.mapRef = React.createRef();
   }
-
   public componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       this.handleGeoSuccess,
@@ -104,7 +102,6 @@ class FindAddressContainer extends React.Component<IProps, IState> {
   public onInputBlur = async () => {
     const { address } = this.state;
     const result = await geoCode(address);
-    console.log(result);
     if (result !== false) {
       const { lat, lng, formatted_address: formatedAddress } = result;
       this.setState({
@@ -112,6 +109,7 @@ class FindAddressContainer extends React.Component<IProps, IState> {
         lat,
         lng
       });
+      this.map.setZoom(17);
       this.map.panTo({ lat, lng });
     }
   };
