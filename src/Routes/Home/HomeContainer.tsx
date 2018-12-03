@@ -15,9 +15,9 @@ interface IState {
   toAddress: string;
   toLat: number;
   toLng: number;
-  distance?: string;
+  distance: string;
   duration?: string;
-  price?: number;
+  price?: string;
 }
 
 interface IProps extends RouteComponentProps<any> {
@@ -33,10 +33,13 @@ class HomeContainer extends React.Component<IProps, IState> {
   public toMarker: google.maps.Marker;
   public directions: google.maps.DirectionsRenderer;
   public state = {
+    distance: "",
+    duartion: undefined,
     isMenuOpen: false,
     lat: 0,
     lng: 0,
-    toAddress: "",
+    price: undefined,
+    toAddress: "paris",
     toLat: 0,
     toLng: 0
   };
@@ -51,7 +54,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     );
   }
   public render() {
-    const { isMenuOpen, toAddress } = this.state;
+    const { isMenuOpen, toAddress, price } = this.state;
     return (
       <ProfileQuery query={USER_PROFILE}>
         {({ loading }) => (
@@ -63,6 +66,7 @@ class HomeContainer extends React.Component<IProps, IState> {
             toAddress={toAddress}
             onInputChange={this.onInputChange}
             onAddressSubmit={this.onAddressSubmit}
+            price={price}
           />
         )}
       </ProfileQuery>
@@ -180,7 +184,8 @@ class HomeContainer extends React.Component<IProps, IState> {
     }
     const renderOptions: google.maps.DirectionsRendererOptions = {
       polylineOptions: {
-        strokeColor: "#000"
+        strokeColor: "#000",
+        strokeOpacity: 0.5
       },
       suppressMarkers: true
     };
@@ -193,24 +198,36 @@ class HomeContainer extends React.Component<IProps, IState> {
       origin: from,
       travelMode: google.maps.TravelMode.DRIVING
     };
-    console.log("google.maps.directionsService", directionsService);
-    directionsService.route(directionsOptions, (result, status) => {
-      if (status === google.maps.DirectionsStatus.OK) {
-        const { routes } = result;
-        const {
-          distance: { text: distance },
-          duration: { text: duration }
-        } = routes[0].legs[0];
-        this.setState({
+    directionsService.route(directionsOptions, this.handleRouteRequest);
+  };
+  public handleRouteRequest = (
+    result: google.maps.DirectionsResult,
+    status: google.maps.DirectionsStatus
+  ) => {
+    if (status === google.maps.DirectionsStatus.OK) {
+      const { routes } = result;
+      const {
+        distance: { text: distance },
+        duration: { text: duration }
+      } = routes[0].legs[0];
+      this.setState(
+        {
           distance,
           duration
-        });
-        this.directions.setDirections(result);
-        this.directions.setMap(this.map);
-      } else {
-        toast.error("There is no route there, you have to");
-      }
-    });
+        },
+        this.setPrice
+      );
+    } else {
+      toast.error("There is no route there, you have to");
+    }
+  };
+  public setPrice = () => {
+    const { distance } = this.state;
+    if (distance) {
+      this.setState({
+        price: Number(parseFloat(distance.replace("", "")) * 3).toFixed(2)
+      });
+    }
   };
 }
 
