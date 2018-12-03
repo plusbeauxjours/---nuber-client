@@ -1,12 +1,17 @@
 import React from "react";
 import HomePresenter from "./HomePresenter";
 import { RouteComponentProps } from "react-router";
-import { Query } from "react-apollo";
-import { userProfile } from "../../types/api";
+import { graphql, Query, MutationFn } from "react-apollo";
+import {
+  userProfile,
+  reportMovement,
+  reportMovementVariables
+} from "../../types/api";
 import { USER_PROFILE } from "../../sharedQueries";
 import ReactDOM from "react-dom";
 import { geoCode } from "../../mapHelpers";
 import { toast } from "react-toastify";
+import { REPORT_LOCATION } from "./HomeQueries";
 
 interface IState {
   isMenuOpen: boolean;
@@ -22,6 +27,7 @@ interface IState {
 
 interface IProps extends RouteComponentProps<any> {
   google: any;
+  reportLocation: MutationFn;
 }
 
 class ProfileQuery extends Query<userProfile> {}
@@ -39,7 +45,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     lat: 0,
     lng: 0,
     price: undefined,
-    toAddress: "paris",
+    toAddress: "budapest",
     toLat: 0,
     toLng: 0
   };
@@ -128,11 +134,18 @@ class HomeContainer extends React.Component<IProps, IState> {
     );
   };
   public handleGeoWatchSuccess: PositionCallback = (position: Position) => {
+    const { reportLocation } = this.props;
     const {
       coords: { latitude, longitude }
     } = position;
     this.userMarker.setPosition({ lat: latitude, lng: longitude });
     this.map.panTo({ lat: latitude, lng: longitude });
+    reportLocation({
+      variables: {
+        lat: parseFloat(latitude.toFixed(10)),
+        lng: parseFloat(longitude.toFixed(10))
+      }
+    });
   };
   public handleGeoWatchError: PositionErrorCallback = () => {
     console.log("No location");
@@ -210,6 +223,9 @@ class HomeContainer extends React.Component<IProps, IState> {
         distance: { text: distance },
         duration: { text: duration }
       } = routes[0].legs[0];
+      this.directions.setDirections(result);
+      this.directions.setMap(this.map);
+      console.log(this.directions);
       this.setState(
         {
           distance,
@@ -225,10 +241,15 @@ class HomeContainer extends React.Component<IProps, IState> {
     const { distance } = this.state;
     if (distance) {
       this.setState({
-        price: Number(parseFloat(distance.replace("", "")) * 3).toFixed(2)
+        price: Number(parseFloat(distance.replace(",", "")) * 3).toFixed(2)
       });
     }
   };
 }
 
-export default HomeContainer;
+export default graphql<any, reportMovement, reportMovementVariables>(
+  REPORT_LOCATION,
+  {
+    name: "reportLocation"
+  }
+)(HomeContainer);
