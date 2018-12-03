@@ -5,6 +5,7 @@ import Sidebar from "react-sidebar";
 import Menu from "../../Components/Menu";
 import Button from "../../Components/Button";
 import AddressBar from "src/Components/AddressBar";
+import { userProfile } from "../../types/api";
 
 const Container = styled.div``;
 
@@ -54,6 +55,7 @@ interface IProps {
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onAddressSubmit: () => void;
   price?: string;
+  data?: userProfile;
 }
 
 const HomePresenter: React.SFC<IProps> = ({
@@ -64,7 +66,8 @@ const HomePresenter: React.SFC<IProps> = ({
   toAddress,
   onInputChange,
   onAddressSubmit,
-  price
+  price,
+  data: { GetMyProfile: { user = null } = {} } = {}
 }) => (
   <Container>
     <Helmet>
@@ -83,12 +86,21 @@ const HomePresenter: React.SFC<IProps> = ({
       }}
     >
       {!loading && <MenuButton onClick={toggleMenu}>|||</MenuButton>}
-      <AddressBar
-        name={"toAddress"}
-        onChange={onInputChange}
-        value={toAddress}
-        onBlur={null}
-      />
+      {user && !user.isDriving && (
+        <React.Fragment>
+          <AddressBar
+            name={"toAddress"}
+            onChange={onInputChange}
+            value={toAddress}
+            onBlur={null}
+          />
+          <ExtendedButton
+            onClick={onAddressSubmit}
+            disabled={toAddress === ""}
+            value={price ? "Change address" : "Pick Address"}
+          />
+        </React.Fragment>
+      )}
       {price && (
         <RequestButton
           onClick={onAddressSubmit}
@@ -96,11 +108,6 @@ const HomePresenter: React.SFC<IProps> = ({
           value={`Request Ride ($${price})`}
         />
       )}
-      <ExtendedButton
-        onClick={onAddressSubmit}
-        disabled={toAddress === ""}
-        value={price ? "Change address" : "Pick Address"}
-      />
       <Map ref={mapRef} />
     </Sidebar>
   </Container>
