@@ -70,6 +70,7 @@ class HomeContainer extends React.Component<IProps, IState> {
         {({ loading, data }) => (
           <NearbyQueries
             query={GET_NEARBY_DRIVERS}
+            pollInterval={1000}
             skip={
               (data &&
                 data.GetMyProfile &&
@@ -132,7 +133,7 @@ class HomeContainer extends React.Component<IProps, IState> {
         lng
       },
       disableDefaultUI: true,
-      zoom: 11
+      zoom: 13
     };
     this.map = new maps.Map(mapNode, mapConfig);
     const userMarkerOptions: google.maps.MarkerOptions = {
