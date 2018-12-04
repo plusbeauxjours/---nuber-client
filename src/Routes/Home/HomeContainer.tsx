@@ -40,6 +40,7 @@ class HomeContainer extends React.Component<IProps, IState> {
   public userMarker: google.maps.Marker;
   public toMarker: google.maps.Marker;
   public directions: google.maps.DirectionsRenderer;
+  public drivers: google.maps.Marker[];
   public state = {
     distance: "",
     duartion: undefined,
@@ -54,6 +55,7 @@ class HomeContainer extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.mapRef = React.createRef();
+    this.drivers = [];
   }
   public componentDidMount() {
     navigator.geolocation.getCurrentPosition(
@@ -73,7 +75,7 @@ class HomeContainer extends React.Component<IProps, IState> {
                 data.GetMyProfile &&
                 data.GetMyProfile.user &&
                 data.GetMyProfile.user.isDriving) ||
-              true
+              false
             }
             onCompleted={this.handleNearbyDrivers}
           >
@@ -120,6 +122,10 @@ class HomeContainer extends React.Component<IProps, IState> {
     const { google } = this.props;
     const maps = google.maps;
     const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
+    if (!mapNode) {
+      this.loadMap(lat, lng);
+      return;
+    }
     const mapConfig: google.maps.MapOptions = {
       center: {
         lat,
@@ -268,7 +274,27 @@ class HomeContainer extends React.Component<IProps, IState> {
         GetNearbyDrivers: { drivers, ok }
       } = data;
       if (ok && drivers) {
-        console.log(drivers);
+        for (const driver of drivers) {
+          if (driver && driver.lastLat && driver.lastLng) {
+            console.log(driver);
+            const markerOptions: google.maps.MarkerOptions = {
+              icon: {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                scale: 5
+              },
+              position: {
+                lat: driver.lastLat,
+                lng: driver.lastLng
+              }
+            };
+            const newMarker: google.maps.Marker = new google.maps.Marker(
+              markerOptions
+            );
+            this.drivers.push(newMarker);
+            newMarker.set("ID", driver.id);
+            newMarker.setMap(this.map);
+          }
+        }
       }
     }
   };
