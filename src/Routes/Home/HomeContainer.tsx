@@ -65,38 +65,33 @@ class HomeContainer extends React.Component<IProps, IState> {
     const { isMenuOpen, toAddress, price } = this.state;
     return (
       <ProfileQuery query={USER_PROFILE}>
-        {({ loading, data }) => {
-          if (data && data.GetMyProfile) {
-            const { GetMyProfile: { user = null } = {} } = data;
-            if (user) {
-              return (
-                <NearbyQueries
-                  query={GET_NEARBY_DRIVERS}
-                  skip={user.isDriving}
-                  onCompleted={this.handleNearbyDrivers}
-                >
-                  {() => (
-                    <HomePresenter
-                      loading={loading}
-                      isMenuOpen={isMenuOpen}
-                      toggleMenu={this.toggleMenu}
-                      mapRef={this.mapRef}
-                      toAddress={toAddress}
-                      onInputChange={this.onInputChange}
-                      onAddressSubmit={this.onAddressSubmit}
-                      price={price}
-                      data={data}
-                    />
-                  )}
-                </NearbyQueries>
-              );
-            } else {
-              return null;
+        {({ loading, data }) => (
+          <NearbyQueries
+            query={GET_NEARBY_DRIVERS}
+            skip={
+              (data &&
+                data.GetMyProfile &&
+                data.GetMyProfile.user &&
+                data.GetMyProfile.user.isDriving) ||
+              true
             }
-          } else {
-            return "Loading";
-          }
-        }}
+            onCompleted={this.handleNearbyDrivers}
+          >
+            {() => (
+              <HomePresenter
+                loading={loading}
+                isMenuOpen={isMenuOpen}
+                toggleMenu={this.toggleMenu}
+                mapRef={this.mapRef}
+                toAddress={toAddress}
+                onInputChange={this.onInputChange}
+                onAddressSubmit={this.onAddressSubmit}
+                price={price}
+                data={data}
+              />
+            )}
+          </NearbyQueries>
+        )}
       </ProfileQuery>
     );
   }
