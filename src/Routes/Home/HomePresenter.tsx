@@ -6,6 +6,7 @@ import Menu from "../../Components/Menu";
 import Button from "../../Components/Button";
 import AddressBar from "src/Components/AddressBar";
 import { userProfile } from "../../types/api";
+import { MutationFn } from "react-apollo";
 
 const Container = styled.div``;
 
@@ -56,6 +57,7 @@ interface IProps {
   onAddressSubmit: () => void;
   price?: string;
   data?: userProfile;
+  requestRideFn?: MutationFn;
 }
 
 const HomePresenter: React.SFC<IProps> = ({
@@ -67,7 +69,8 @@ const HomePresenter: React.SFC<IProps> = ({
   onInputChange,
   onAddressSubmit,
   price,
-  data: { GetMyProfile: { user = null } = {} } = {}
+  data: { GetMyProfile: { user = null } = {} } = {},
+  requestRideFn
 }) => (
   <Container>
     <Helmet>
@@ -103,7 +106,7 @@ const HomePresenter: React.SFC<IProps> = ({
       )}
       {price && (
         <RequestButton
-          onClick={onAddressSubmit}
+          onClick={requestRideFn}
           disabled={toAddress === ""}
           value={`Request Ride ($${price})`}
         />
