@@ -6,7 +6,8 @@ import {
   userProfile,
   reportMovement,
   reportMovementVariables,
-  getDrivers
+  getDrivers,
+  getRides
 } from "../../types/api";
 import { USER_PROFILE } from "../../sharedQueries";
 import ReactDOM from "react-dom";
@@ -15,7 +16,8 @@ import { toast } from "react-toastify";
 import {
   REPORT_LOCATION,
   GET_NEARBY_DRIVERS,
-  REQUEST_RIDE
+  REQUEST_RIDE,
+  GET_NEARBY_RIDE
 } from "./HomeQueries";
 import { requestRide, requestRideVariables } from "../../types/api";
 
@@ -30,6 +32,7 @@ interface IState {
   duration?: string;
   price?: string;
   fromAddress: string;
+  isDriving: boolean;
 }
 
 interface IProps extends RouteComponentProps<any> {
@@ -40,6 +43,7 @@ interface IProps extends RouteComponentProps<any> {
 class ProfileQuery extends Query<userProfile> {}
 class NearbyQueries extends Query<getDrivers> {}
 class RequestRideMutation extends Mutation<requestRide, requestRideVariables> {}
+class GetNearbyRides extends Query<getRides> {}
 
 class HomeContainer extends React.Component<IProps, IState> {
   public mapRef: any;
@@ -52,6 +56,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     distance: "",
     duration: undefined,
     fromAddress: "",
+    isDriving: true,
     isMenuOpen: false,
     lat: 0,
     lng: 0,
@@ -77,6 +82,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       duration,
       fromAddress,
       isMenuOpen,
+      isDriving,
       lat,
       lng,
       price,
@@ -85,23 +91,18 @@ class HomeContainer extends React.Component<IProps, IState> {
       toLng
     } = this.state;
     return (
-      <ProfileQuery query={USER_PROFILE}>
+      <ProfileQuery query={USER_PROFILE} onCompleted={this.handleProfileQuery}>
         {({ loading, data }) => (
           <NearbyQueries
             query={GET_NEARBY_DRIVERS}
             pollInterval={2000}
-            skip={
-              (data &&
-                data.GetMyProfile &&
-                data.GetMyProfile.user &&
-                data.GetMyProfile.user.isDriving) ||
-              false
-            }
+            skip={isDriving}
             onCompleted={this.handleNearbyDrivers}
           >
             {() => (
               <RequestRideMutation
                 mutation={REQUEST_RIDE}
+                onCompleted={this.handleRideRequest}
                 variables={{
                   distance,
                   dropOffAddress: toAddress,
@@ -115,18 +116,23 @@ class HomeContainer extends React.Component<IProps, IState> {
                 }}
               >
                 {requestRideFn => (
-                  <HomePresenter
-                    loading={loading}
-                    isMenuOpen={isMenuOpen}
-                    toggleMenu={this.toggleMenu}
-                    mapRef={this.mapRef}
-                    toAddress={toAddress}
-                    onInputChange={this.onInputChange}
-                    onAddressSubmit={this.onAddressSubmit}
-                    price={price}
-                    data={data}
-                    requestRideFn={requestRideFn}
-                  />
+                  <GetNearbyRides query={GET_NEARBY_RIDE} skip={isDriving}>
+                    {({ data: nearbyRide }) => (
+                      <HomePresenter
+                        loading={loading}
+                        isMenuOpen={isMenuOpen}
+                        toggleMenu={this.toggleMenu}
+                        mapRef={this.mapRef}
+                        toAddress={toAddress}
+                        onInputChange={this.onInputChange}
+                        onAddressSubmit={this.onAddressSubmit}
+                        price={price}
+                        data={data}
+                        requestRideFn={requestRideFn}
+                        nearbyRide={nearbyRide}
+                      />
+                    )}
+                  </GetNearbyRides>
                 )}
               </RequestRideMutation>
             )}
@@ -358,6 +364,25 @@ class HomeContainer extends React.Component<IProps, IState> {
           }
         }
       }
+    }
+  };
+  public handleRideRequest = (data: requestRide) => {
+    const { RequestRide } = data;
+    if (RequestRide.ok) {
+      toast.success("Drivce requested, finding a driver");
+    } else {
+      toast.error(RequestRide.error);
+    }
+  };
+  public handleProfileQuery = (data: userProfile) => {
+    const { GetMyProfile } = data;
+    if (GetMyProfile.user) {
+      const {
+        user: { isDriving }
+      } = GetMyProfile;
+      this.setState({
+        isDriving
+      });
     }
   };
 }

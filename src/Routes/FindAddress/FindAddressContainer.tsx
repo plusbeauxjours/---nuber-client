@@ -63,6 +63,7 @@ class FindAddressContainer extends React.Component<IProps, IState> {
     const { google } = this.props;
     const maps = google.maps;
     const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
+    console.log("mapNode", mapNode);
     const mapConfig: google.maps.MapOptions = {
       center: {
         lat,
