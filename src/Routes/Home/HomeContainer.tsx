@@ -13,13 +13,18 @@ import { USER_PROFILE } from "../../sharedQueries";
 import ReactDOM from "react-dom";
 import { geoCode, reverseGeoCode } from "../../mapHelpers";
 import { toast } from "react-toastify";
+import { ACCEPT_RIDE } from "./HomeQueries";
 import {
   REPORT_LOCATION,
   GET_NEARBY_DRIVERS,
   REQUEST_RIDE,
   GET_NEARBY_RIDE
 } from "./HomeQueries";
-import { requestRide, requestRideVariables } from "../../types/api";
+import {
+  requestRide,
+  requestRideVariables,
+  acceptRideVariables
+} from "../../types/api";
 
 interface IState {
   isMenuOpen: boolean;
@@ -44,6 +49,7 @@ class ProfileQuery extends Query<userProfile> {}
 class NearbyQueries extends Query<getDrivers> {}
 class RequestRideMutation extends Mutation<requestRide, requestRideVariables> {}
 class GetNearbyRides extends Query<getRides> {}
+class AcceptRide extends Mutation<AcceptRide, acceptRideVariables> {}
 
 class HomeContainer extends React.Component<IProps, IState> {
   public mapRef: any;
@@ -61,7 +67,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     lat: 0,
     lng: 0,
     price: undefined,
-    toAddress: "budapest",
+    toAddress: "nimmanhaemin",
     toLat: 0,
     toLng: 0
   };
@@ -95,7 +101,7 @@ class HomeContainer extends React.Component<IProps, IState> {
         {({ loading, data }) => (
           <NearbyQueries
             query={GET_NEARBY_DRIVERS}
-            pollInterval={2000}
+            pollInterval={5000}
             skip={isDriving}
             onCompleted={this.handleNearbyDrivers}
           >
@@ -116,21 +122,26 @@ class HomeContainer extends React.Component<IProps, IState> {
                 }}
               >
                 {requestRideFn => (
-                  <GetNearbyRides query={GET_NEARBY_RIDE} skip={isDriving}>
+                  <GetNearbyRides query={GET_NEARBY_RIDE} skip={!isDriving}>
                     {({ data: nearbyRide }) => (
-                      <HomePresenter
-                        loading={loading}
-                        isMenuOpen={isMenuOpen}
-                        toggleMenu={this.toggleMenu}
-                        mapRef={this.mapRef}
-                        toAddress={toAddress}
-                        onInputChange={this.onInputChange}
-                        onAddressSubmit={this.onAddressSubmit}
-                        price={price}
-                        data={data}
-                        requestRideFn={requestRideFn}
-                        nearbyRide={nearbyRide}
-                      />
+                      <AcceptRide mutation={ACCEPT_RIDE}>
+                        {acceptRideFn => (
+                          <HomePresenter
+                            loading={loading}
+                            isMenuOpen={isMenuOpen}
+                            toggleMenu={this.toggleMenu}
+                            mapRef={this.mapRef}
+                            toAddress={toAddress}
+                            onInputChange={this.onInputChange}
+                            onAddressSubmit={this.onAddressSubmit}
+                            price={price}
+                            data={data}
+                            requestRideFn={requestRideFn}
+                            nearbyRide={nearbyRide}
+                            acceptRideFn={acceptRideFn}
+                          />
+                        )}
+                      </AcceptRide>
                     )}
                   </GetNearbyRides>
                 )}
