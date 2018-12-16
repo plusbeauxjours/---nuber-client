@@ -2,7 +2,7 @@ import React from "react";
 import Helmet from "react-helmet";
 import styled from "../../typed-components";
 import AddressBar from "../../Components/AddressBar";
-import Button from "src/Components/Button";
+import Button from "../../Components/Button";
 
 const Map = styled.div`
   position: absolute;
