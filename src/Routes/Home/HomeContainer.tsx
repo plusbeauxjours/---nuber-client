@@ -51,7 +51,7 @@ class ProfileQuery extends Query<userProfile> {}
 class NearbyQueries extends Query<getDrivers> {}
 class RequestRideMutation extends Mutation<requestRide, requestRideVariables> {}
 class GetNearbyRides extends Query<getRides> {}
-class AcceptRide extends Mutation<AcceptRide, acceptRideVariables> {}
+class AcceptRide extends Mutation<acceptRide, acceptRideVariables> {}
 
 class HomeContainer extends React.Component<IProps, IState> {
   public mapRef: any;
@@ -184,7 +184,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       };
     });
   };
-  public handleGeoSuccess: PositionCallback = (position: Position) => {
+  public handleGeoSuccess = (position: Position) => {
     const {
       coords: { latitude, longitude }
     } = position;
@@ -195,7 +195,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     this.getFromAddress(latitude, longitude);
     this.loadMap(latitude, longitude);
   };
-  public handleGeoError: PositionErrorCallback = () => {
+  public handleGeoError = () => {
     console.log("No location");
   };
   public getFromAddress = async (lat: number, lng: number) => {
@@ -207,7 +207,6 @@ class HomeContainer extends React.Component<IProps, IState> {
     }
   };
   public loadMap = (lat, lng) => {
-    console.log(lat, lng);
     const { google } = this.props;
     const maps = google.maps;
     const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
@@ -245,7 +244,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       watchOptions
     );
   };
-  public handleGeoWatchSuccess: PositionCallback = (position: Position) => {
+  public handleGeoWatchSuccess = (position: Position) => {
     const { reportLocation } = this.props;
     const {
       coords: { latitude, longitude }
@@ -259,8 +258,8 @@ class HomeContainer extends React.Component<IProps, IState> {
       }
     });
   };
-  public handleGeoWatchError: PositionErrorCallback = () => {
-    console.log("No location");
+  public handleGeoWatchError = () => {
+    console.log("Error watching you");
   };
   public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -365,7 +364,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       if (ok && drivers) {
         for (const driver of drivers) {
           if (driver && driver.lastLat && driver.lastLng) {
-            const existingDriver:
+            const exisitingDriver:
               | google.maps.Marker
               | undefined = this.drivers.find(
               (driverMarker: google.maps.Marker) => {
@@ -373,12 +372,12 @@ class HomeContainer extends React.Component<IProps, IState> {
                 return markerID === driver.id;
               }
             );
-            if (existingDriver) {
-              existingDriver.setPosition({
+            if (exisitingDriver) {
+              exisitingDriver.setPosition({
                 lat: driver.lastLat,
                 lng: driver.lastLng
               });
-              existingDriver.setMap(this.map);
+              exisitingDriver.setMap(this.map);
             } else {
               const markerOptions: google.maps.MarkerOptions = {
                 icon: {
@@ -406,7 +405,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     const { history } = this.props;
     const { RequestRide } = data;
     if (RequestRide.ok) {
-      toast.success("Drivce requested, finding a driver");
+      toast.success("Drive requested, finding a driver");
       history.push(`/ride/${RequestRide.ride!.id}`);
     } else {
       toast.error(RequestRide.error);

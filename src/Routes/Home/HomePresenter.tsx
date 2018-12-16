@@ -4,10 +4,10 @@ import Helmet from "react-helmet";
 import Sidebar from "react-sidebar";
 import Menu from "../../Components/Menu";
 import Button from "../../Components/Button";
-import AddressBar from "src/Components/AddressBar";
+import AddressBar from "../../Components/AddressBar";
 import { userProfile, getRides } from "../../types/api";
 import { MutationFn } from "react-apollo";
-import RidePopUp from "src/Components/RidePopUp";
+import RidePopUp from "../../Components/RidePopUp";
 
 const Container = styled.div``;
 
