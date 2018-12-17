@@ -12,8 +12,8 @@ import RidePopUp from "../../Components/RidePopUp";
 const Container = styled.div``;
 
 const MenuButton = styled.button`
-  appearance: noen;
-  padding: 15px;
+  appearance: none;
+  padding: 10px;
   position: absolute;
   top: 10px;
   left: 10px;

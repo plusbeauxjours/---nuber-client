@@ -1,9 +1,9 @@
 import React from "react";
+import { MutationFn } from "react-apollo";
+import { Link } from "react-router-dom";
+import Button from "../../Components/Button";
 import styled from "../../typed-components";
 import { getRide, userProfile } from "../../types/api";
-import { MutationFn } from "react-apollo";
-import Button from "src/Components/Button";
-import { Link } from "react-router-dom";
 
 const Container = styled.div`
   padding: 40px;
@@ -46,8 +46,8 @@ const ExtendedButton = styled(Button)`
 interface IProps {
   data?: getRide;
   userData?: userProfile;
-  updateRideFn: MutationFn;
   loading: boolean;
+  updateRideFn: MutationFn;
 }
 
 const RidePresenter: React.SFC<IProps> = ({
@@ -60,15 +60,15 @@ const RidePresenter: React.SFC<IProps> = ({
       <React.Fragment>
         <Title>Passenger</Title>
         <Passenger>
-          <Img src={ride.driver.profilePhoto!} />
-          <Data>{ride.passenger.fullName}</Data>
+          <Img src={ride.passenger.profilePhoto!} />
+          <Data>{ride.passenger.fullName!}</Data>
         </Passenger>
         {ride.driver && (
           <React.Fragment>
             <Title>Driver</Title>
             <Passenger>
               <Img src={ride.driver.profilePhoto!} />
-              <Data>{ride.driver.fullName}</Data>
+              <Data>{ride.driver.fullName!}</Data>
             </Passenger>
           </React.Fragment>
         )}
@@ -88,7 +88,7 @@ const RidePresenter: React.SFC<IProps> = ({
           {ride.driver.id === user.id && ride.status === "ACCEPTED" && (
             <ExtendedButton
               value={"Picked Up"}
-              onClic={() =>
+              onClick={() =>
                 updateRideFn({
                   variables: {
                     rideId: ride.id,
@@ -100,7 +100,7 @@ const RidePresenter: React.SFC<IProps> = ({
           )}
           {ride.driver.id === user.id && ride.status === "ONROUTE" && (
             <ExtendedButton
-              value={"Finisehd"}
+              value={"Finished"}
               onClick={() =>
                 updateRideFn({
                   variables: {
@@ -112,7 +112,7 @@ const RidePresenter: React.SFC<IProps> = ({
             />
           )}
           {ride.driver.id === user.id ||
-            (ride.passenger.id === user.id && ride.status === "ACCEPTED" && (
+            (ride.passenger.id === user.id && ride.status !== "REQUESTING" && (
               <Link to={`/chat/${ride.chatId}`}>
                 <ExtendedButton value={"Chat"} onClick={null} />
               </Link>

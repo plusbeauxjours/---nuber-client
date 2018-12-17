@@ -1,2 +1,2 @@
-import RidePopUp from "./RidePupUp";
+import RidePopUp from "./RidePopUp";
 export default RidePopUp;

@@ -1,32 +1,31 @@
+import { SubscribeToMoreOptions } from "apollo-client";
 import React from "react";
-import HomePresenter from "./HomePresenter";
-import { RouteComponentProps } from "react-router";
-import { graphql, Query, MutationFn, Mutation } from "react-apollo";
+import { graphql, Mutation, MutationFn, Query } from "react-apollo";
+import ReactDOM from "react-dom";
+import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
+import { geoCode, reverseGeoCode } from "../../mapHelpers";
+import { USER_PROFILE } from "../../sharedQueries";
 import {
-  userProfile,
+  acceptRide,
+  acceptRideVariables,
+  getDrivers,
+  getRides,
   reportMovement,
   reportMovementVariables,
-  getDrivers,
-  getRides
-} from "../../types/api";
-import { USER_PROFILE } from "../../sharedQueries";
-import ReactDOM from "react-dom";
-import { geoCode, reverseGeoCode } from "../../mapHelpers";
-import { toast } from "react-toastify";
-import {
-  REPORT_LOCATION,
-  GET_NEARBY_DRIVERS,
-  REQUEST_RIDE,
-  GET_NEARBY_RIDE
-} from "./HomeQueries";
-import {
   requestRide,
   requestRideVariables,
-  acceptRideVariables
+  userProfile
 } from "../../types/api";
-import { SubscribeToMoreOptions } from "apollo-client";
-import { SUBSCRIBE_NEARBY_RIDES, ACCEPT_RIDE } from "./HomeQueries";
-import { acceptRide } from "../../types/api";
+import HomePresenter from "./HomePresenter";
+import {
+  ACCEPT_RIDE,
+  GET_NEARBY_DRIVERS,
+  GET_NEARBY_RIDE,
+  REPORT_LOCATION,
+  REQUEST_RIDE,
+  SUBSCRIBE_NEARBY_RIDES
+} from "./HomeQueries";
 
 interface IState {
   isMenuOpen: boolean;
@@ -195,9 +194,6 @@ class HomeContainer extends React.Component<IProps, IState> {
     this.getFromAddress(latitude, longitude);
     this.loadMap(latitude, longitude);
   };
-  public handleGeoError = () => {
-    console.log("No location");
-  };
   public getFromAddress = async (lat: number, lng: number) => {
     const address = await reverseGeoCode(lat, lng);
     if (address) {
@@ -260,6 +256,9 @@ class HomeContainer extends React.Component<IProps, IState> {
   };
   public handleGeoWatchError = () => {
     console.log("Error watching you");
+  };
+  public handleGeoError = () => {
+    console.log("No location");
   };
   public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -336,7 +335,6 @@ class HomeContainer extends React.Component<IProps, IState> {
       } = routes[0].legs[0];
       this.directions.setDirections(result);
       this.directions.setMap(this.map);
-      console.log(this.directions);
       this.setState(
         {
           distance,
@@ -345,7 +343,7 @@ class HomeContainer extends React.Component<IProps, IState> {
         this.setPrice
       );
     } else {
-      toast.error("There is no route there, you have to swim dude");
+      toast.error("There is no route there, you have to swim ");
     }
   };
   public setPrice = () => {
@@ -381,7 +379,7 @@ class HomeContainer extends React.Component<IProps, IState> {
             } else {
               const markerOptions: google.maps.MarkerOptions = {
                 icon: {
-                  path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                  path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
                   scale: 5
                 },
                 position: {

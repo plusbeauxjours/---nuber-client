@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "../../typed-components";
-import Button from "../Button/Button";
+import Button from "../Button";
 
 interface IProps {
   pickUpAddress: string;
@@ -16,7 +16,7 @@ interface IProps {
 const Container = styled.div`
   background-color: white;
   position: absolute;
-  margin: aturo;
+  margin: auto;
   top: 0;
   bottom: 0;
   left: 0;
@@ -64,12 +64,10 @@ const RidePopUp: React.SFC<IProps> = ({
   <Container>
     <Title>Pick Up Address</Title>
     <Data>{pickUpAddress}</Data>
-    <Title>Drop off Address</Title>
+    <Title>Drop Off Address</Title>
     <Data>{dropOffAddress}</Data>
     <Title>Price</Title>
     <Data>{price}</Data>
-    <Title>Distance</Title>
-    <Data>{distance}</Data>
     <Title>Distance</Title>
     <Data>{distance}</Data>
     <Title>Passenger:</Title>
@@ -78,7 +76,7 @@ const RidePopUp: React.SFC<IProps> = ({
       <Data>{passengerName}</Data>
     </Passenger>
     <Button
-      onClick={() => acceptRideFn({ variables: { ride: id } })}
+      onClick={() => acceptRideFn({ variables: { rideId: id } })}
       value={"Accept Ride"}
     />
   </Container>
