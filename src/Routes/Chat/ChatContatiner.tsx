@@ -1,17 +1,17 @@
+import { SubscribeToMoreOptions } from "apollo-client";
 import React from "react";
-import { RouteComponentProps } from "react-router";
-import ChatPresenter from "./ChatPresenter";
-import { Query, Mutation, MutationFn } from "react-apollo";
+import { Mutation, MutationFn, Query } from "react-apollo";
+import { RouteComponentProps } from "react-router-dom";
+import { USER_PROFILE } from "../../sharedQueries";
 import {
   getChat,
   getChatVariables,
-  userProfile,
   sendMessage,
-  sendMessageVariables
+  sendMessageVariables,
+  userProfile
 } from "../../types/api";
-import { USER_PROFILE } from "../../sharedQueries";
+import ChatPresenter from "./ChatPresenter";
 import { GET_CHAT, SEND_MESSAGE, SUBSCRIBE_TO_MESSAGES } from "./ChatQueries";
-import { SubscribeToMoreOptions } from "apollo-client";
 
 interface IProps extends RouteComponentProps<any> {}
 interface IState {
@@ -51,6 +51,21 @@ class ChatContainer extends React.Component<IProps, IState> {
                   if (!subscriptionData.data) {
                     return prev;
                   }
+                  const {
+                    data: { MessageSubscription }
+                  } = subscriptionData;
+                  const {
+                    GetChat: {
+                      chat: { messages }
+                    }
+                  } = prev;
+                  const newMessageId = MessageSubscription.id;
+                  const latestMessageId = messages[messages.length - 1].id;
+
+                  if (newMessageId === latestMessageId) {
+                    return;
+                  }
+
                   const newObject = Object.assign({}, prev, {
                     GetChat: {
                       ...prev.GetChat,
@@ -58,7 +73,7 @@ class ChatContainer extends React.Component<IProps, IState> {
                         ...prev.GetChat.chat,
                         messages: [
                           ...prev.GetChat.chat.messages,
-                          subscriptionData.data.MessageSubscription
+                          MessageSubscription
                         ]
                       }
                     }
