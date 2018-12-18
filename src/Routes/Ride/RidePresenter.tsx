@@ -115,7 +115,7 @@ const RidePresenter: React.SFC<IProps> = ({
                 }
               />
             )}
-          {ride.status !== "REQEUSTING" && (
+          {ride.status !== "REQUESTING" && (
             <Link to={`/chat/${ride.chatId}`}>
               <ExtendedButton value={"Chat"} onClick={null} />
             </Link>

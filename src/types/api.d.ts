@@ -84,8 +84,8 @@ export interface getChat_GetChat_chat_messages {
 export interface getChat_GetChat_chat {
   __typename: "Chat";
   passengerId: number;
-  driverId: number;
-  messages: (getChat_GetChat_chat_messages | null)[];
+  driverId: number | null;
+  messages: (getChat_GetChat_chat_messages | null)[] | null;
 }
 
 export interface getChat_GetChat {
@@ -132,6 +132,25 @@ export interface sendMessage {
 export interface sendMessageVariables {
   text: string;
   chatId: number;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL subscription operation: messageSubscription
+// ====================================================
+
+export interface messageSubscription_MessageSubscription {
+  __typename: "Message";
+  id: number;
+  text: string;
+  userId: number | null;
+}
+
+export interface messageSubscription {
+  MessageSubscription: messageSubscription_MessageSubscription | null;
 }
 
 
@@ -381,7 +400,7 @@ export interface getRide_GetRide_ride {
   price: number;
   distance: string;
   duration: string;
-  driver: getRide_GetRide_ride_driver;
+  driver: getRide_GetRide_ride_driver | null;
   passenger: getRide_GetRide_ride_passenger;
   chatId: number | null;
 }
@@ -432,7 +451,7 @@ export interface rideUpdates_RideStatusSubscription {
   price: number;
   distance: string;
   duration: string;
-  driver: rideUpdates_RideStatusSubscription_driver;
+  driver: rideUpdates_RideStatusSubscription_driver | null;
   passenger: rideUpdates_RideStatusSubscription_passenger;
   chatId: number | null;
 }
